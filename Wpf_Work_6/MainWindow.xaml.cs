@@ -23,7 +23,7 @@ namespace Wpf_Work_6
         public MainWindow()
         {
             InitializeComponent();
-            WeatherControl weatherControl = new WeatherControl("св", 25, Precipitation.sunny);
+            WeatherControl weatherControl = new WeatherControl("св", 25, Precipitation.солнечно);
         }
     }
 }

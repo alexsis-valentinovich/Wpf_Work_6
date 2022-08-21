@@ -9,29 +9,39 @@ namespace Wpf_Work_6
 {
     enum Precipitation
     {
-        sunny,
-        cloudly,
-        rain,
-        snow
+        солнечно,
+        облачно,
+        дождь,
+        снег
     }
     class WeatherControl : DependencyObject
     {
         private string wind_direction;
         private int wind_speed;
-        public string WingDirection { get; set; }
+
+
         public WeatherControl(string windDir, int windSpeed, Precipitation precipitation)
         {
             this.wind_direction = windDir;
             this.wind_speed = windSpeed;
         }
         public static readonly DependencyProperty TempProperty;
+        public static readonly DependencyProperty WindProperty;
         public int Temp
         {
             get => (int)GetValue(TempProperty);
             set => SetValue(TempProperty, value);
         }
+        public string WindDirection
+        {
+            get => (string)GetValue(WindProperty);
+            set => SetValue(WindProperty, value);
+
+        }
+
         static WeatherControl()
         {
+
             TempProperty = DependencyProperty.Register(
                 nameof(Temp),
                 typeof(int),
@@ -43,6 +53,20 @@ namespace Wpf_Work_6
                     null,
                     new CoerceValueCallback(CoerceTemp)),
                 new ValidateValueCallback(ValidateTemp));
+
+
+            WindProperty = DependencyProperty.Register(
+                nameof(WindDirection),
+                typeof(string),
+                typeof(WeatherControl),
+                new FrameworkPropertyMetadata(
+                    0,
+                    FrameworkPropertyMetadataOptions.AffectsParentMeasure |
+                    FrameworkPropertyMetadataOptions.AffectsRender,
+                    null,
+            new CoerceValueCallback(CoerceWind)),
+            new ValidateValueCallback(ValidateWind));
+
         }
         private static bool ValidateTemp(object value)
         {
@@ -68,5 +92,30 @@ namespace Wpf_Work_6
                 return null;
             }
         }
+        private static bool ValidateWind(object value)
+        {
+            string v = (string)value;
+            if (v == "С" || v == "Ю" || v == "В" || v == "З")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private static object CoerceWind(DependencyObject d, object baseValue)
+        {
+            string v = (string)baseValue;
+            if (v == "С" || v == "Ю" || v == "В" || v == "З")
+            {
+                return v;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
+
